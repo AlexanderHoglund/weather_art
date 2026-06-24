@@ -78,6 +78,18 @@ export const LOCATIONS: Record<LocationKey, LocationConfig> = {
       windows: EMPTY_WINDOWS,
     }),
   },
+  malmo: {
+    key: "malmo",
+    label: "Malmö",
+    lat: 55.604981,
+    lon: 13.003822,
+    darknessAdjuster: 0,
+    resolveAssets: () => ({
+      city: `${IMG}/Malmo/malmoDag.png`,
+      black: `${IMG}/Malmo/malmoBlack.png`,
+      windows: EMPTY_WINDOWS,
+    }),
+  },
   paris: {
     key: "paris",
     label: "Paris",
@@ -177,6 +189,7 @@ export const LOCATION_ORDER: LocationKey[] = [
   "mylocation",
   "hongkong",
   "stockholm",
+  "malmo",
   "paris",
   "washington",
   "la",
