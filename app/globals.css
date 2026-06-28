@@ -7,6 +7,15 @@
   --panel-bg: rgba(255, 255, 255, 0.18);
   --panel-fill: rgba(255, 255, 255, 0.9);
   --panel-border: rgba(255, 255, 255, 0.44);
+  /* Solid colour shown beside the stage when the screen is wider than the
+     aspect cap (pillarbox surround). Deep slate so it reads as an intentional
+     frame, not a black/white bar. */
+  --stage-surround: #0b1020;
+  /* Widest the stage is allowed to get (drawn width : height). Past this the
+     scene is centred and the surround fills the sides. 1.5 (3:2) ≈ the
+     artwork's native shape, so the skyline stops stretching; anything wider —
+     including a maximized 16:9 monitor — gets solid sides. */
+  --stage-max-aspect: 1.5;
 }
 
 * {
@@ -17,7 +26,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #000;
+  background: var(--stage-surround);
+  overflow: hidden;
+}
+
+/* The aspect-capped, horizontally-centred stage. Everything (canvases + UI)
+   lives inside it, so controls anchor to the stage edges and never sit over the
+   surround. */
+#stage {
+  position: relative;
+  width: min(100vw, calc(100dvh * var(--stage-max-aspect)));
+  height: 100vh; /* fallback */
+  height: 100dvh; /* tracks mobile toolbars */
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -30,10 +51,8 @@ body {
 }
 
 #wrapper {
-  position: relative;
-  width: 100vw;
-  height: 100vh; /* fallback */
-  height: 100dvh; /* tracks mobile toolbars */
+  position: absolute;
+  inset: 0; /* fills the centered stage */
   overflow: hidden;
 }
 
@@ -236,6 +255,35 @@ body {
   background: rgba(255, 153, 204, 0.55);
   color: #111;
   border-color: rgba(255, 153, 204, 0.9);
+}
+
+.shareButton {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  color: #fff;
+  font: bold 11px/1 Arial, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.shareButton:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Brief confirmation flash after copying the link to the clipboard. */
+.shareButtonDone {
+  background: rgba(120, 220, 150, 0.6);
+  color: #0b2415;
+  border-color: rgba(120, 220, 150, 0.95);
 }
 
 /* ---- Location panel (search field + presets) ---------------------------- */

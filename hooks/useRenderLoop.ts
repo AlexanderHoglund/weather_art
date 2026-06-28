@@ -47,13 +47,17 @@ export function useRenderLoop(refs: StageRefs): void {
     };
 
     const ctxList = Object.values(ctx);
-    let metrics = computeMetrics(window.innerWidth, window.innerHeight);
+    // Size to the stage box (#wrapper), not the window: on wide screens the
+    // stage is aspect-capped + pillarboxed by CSS, so the scene must fill that
+    // capped box rather than the full viewport.
+    const host = canvases.sky!.parentElement as HTMLElement;
+    let metrics = computeMetrics(host.clientWidth, host.clientHeight);
     let scene: Scene | null = null;
     let currentKey = "";
     let raf = 0;
 
     const resize = () => {
-      metrics = computeMetrics(window.innerWidth, window.innerHeight);
+      metrics = computeMetrics(host.clientWidth, host.clientHeight);
       // Render in CSS pixels but back the canvas with device pixels for crisp
       // output on high-DPI phones. Cap at 2x so 3x screens don't quadruple the
       // fill cost of heavy particle scenes. Setting canvas.width resets the
@@ -69,8 +73,9 @@ export function useRenderLoop(refs: StageRefs): void {
       currentKey = ""; // force a scene rebuild so particles re-scale
     };
 
-    // Coalesce bursts of resize events into one update per frame, and listen to
-    // the signals that actually fire on mobile (orientation + visualViewport).
+    // Coalesce bursts of resize events into one update per frame. A
+    // ResizeObserver on the stage box catches everything that changes its size —
+    // window resize, pillarbox cap kicking in, and mobile toolbar (dvh) shifts.
     let resizePending = false;
     const onResize = () => {
       if (resizePending) return;
@@ -81,9 +86,8 @@ export function useRenderLoop(refs: StageRefs): void {
       });
     };
     resize();
-    window.addEventListener("resize", onResize);
-    window.addEventListener("orientationchange", onResize);
-    window.visualViewport?.addEventListener("resize", onResize);
+    const observer = new ResizeObserver(onResize);
+    observer.observe(host);
 
     const loop = () => {
       const state = useWeatherStore.getState();
@@ -128,9 +132,7 @@ export function useRenderLoop(refs: StageRefs): void {
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("orientationchange", onResize);
-      window.visualViewport?.removeEventListener("resize", onResize);
+      observer.disconnect();
     };
     // refs are stable useRef containers; run once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps

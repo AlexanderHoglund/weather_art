@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useRenderLoop } from "@/hooks/useRenderLoop";
 import { useWeatherData } from "@/hooks/useWeatherData";
+import { useLocationUrl } from "@/hooks/useLocationUrl";
 
 // The canvas stage. Renders the stacked canvases (DOM order == z-order, matching
 // index.html lines 144-153 minus the unused fireworks canvas), drives weather
@@ -10,6 +11,7 @@ import { useWeatherData } from "@/hooks/useWeatherData";
 
 export function WeatherStage() {
   useWeatherData();
+  useLocationUrl();
 
   const sky = useRef<HTMLCanvasElement>(null);
   const sunMoon = useRef<HTMLCanvasElement>(null);

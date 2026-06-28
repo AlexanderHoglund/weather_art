@@ -8,12 +8,18 @@ import { WeatherInfo } from "@/components/overlay/WeatherInfo";
 export default function Home() {
   return (
     <main>
-      <WeatherStage />
-      <TransitionVeil />
-      <ControlBar />
-      <SongMarquee />
-      <WeatherInfo />
-      <CreditsModal />
+      {/* Centered, aspect-capped stage. On screens wider than the cap it is
+          pillarboxed; the solid surround colour (body background) shows in the
+          margins. Canvases AND controls live inside so nothing floats over the
+          empty sides. */}
+      <div id="stage">
+        <WeatherStage />
+        <TransitionVeil />
+        <ControlBar />
+        <SongMarquee />
+        <WeatherInfo />
+        <CreditsModal />
+      </div>
     </main>
   );
 }

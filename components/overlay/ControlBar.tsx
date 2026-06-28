@@ -2,6 +2,7 @@
 
 import { ForecastTimeline } from "./ForecastTimeline";
 import { LocationPicker } from "./LocationPicker";
+import { ShareButton } from "./ShareButton";
 import { SoundButton } from "./SoundButton";
 
 // Consolidated top bar: a unified location picker (current city -> search +
@@ -13,6 +14,7 @@ export function ControlBar() {
     <div className="controlBar">
       <div className="controlBarRow">
         <LocationPicker />
+        <ShareButton />
         <SoundButton />
       </div>
       <ForecastTimeline />

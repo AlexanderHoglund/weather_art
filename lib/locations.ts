@@ -90,6 +90,18 @@ export const LOCATIONS: Record<LocationKey, LocationConfig> = {
       windows: EMPTY_WINDOWS,
     }),
   },
+  karlshamn: {
+    key: "karlshamn",
+    label: "Karlshamn",
+    lat: 56.170639,
+    lon: 14.861779,
+    darknessAdjuster: 0,
+    resolveAssets: () => ({
+      city: `${IMG}/Karlshamn/karlshamnDag.png`,
+      black: `${IMG}/Karlshamn/karlshamnBlack.png`,
+      windows: EMPTY_WINDOWS,
+    }),
+  },
   paris: {
     key: "paris",
     label: "Paris",
@@ -190,6 +202,7 @@ export const LOCATION_ORDER: LocationKey[] = [
   "hongkong",
   "stockholm",
   "malmo",
+  "karlshamn",
   "paris",
   "washington",
   "la",

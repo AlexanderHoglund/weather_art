@@ -7,6 +7,7 @@ export type LocationKey =
   | "hongkong"
   | "stockholm"
   | "malmo"
+  | "karlshamn"
   | "paris"
   | "washington"
   | "la"
